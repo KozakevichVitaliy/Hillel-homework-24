@@ -53,16 +53,16 @@
 */
 
 class SkillsManager {
-  static skills = [];
+  #skills = [];
   addSkill(skill) {
     if (typeof skill === 'string' && skill.trim().length >= 2) {
-      SkillsManager.skills.push(skill);
+      this.#skills.push(skill);
       return skill;
     }
     return null;
   }
   getAllSkills() {
-    return [...SkillsManager.skills];
+    return [...this.#skills];
   }
 }
 
