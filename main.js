@@ -89,8 +89,10 @@ console.log(skillsManager.getAllSkills())
 
 const getAmountMonthDays = (month, date) => {
   switch (month) {
-    case 2:
-      return date.getFullYear() % 4 === 0 ? 29 : 28;
+    case 2 && date.getFullYear() % 4 !== 0:
+      return 28;
+    case 2 && date.getFullYear() % 4 === 0:
+      return 29;
     case 8:
       return 31;
     default:
@@ -121,12 +123,12 @@ DateCalculator.prototype.subtractDays = function(days) {
   let day = this.date.getDate() - days;
   const correctMonthDays = getAmountMonthDays(month, this.date);
   
-  if (day < 0) {
+  if (day <= 0) {
     month--;
     day = correctMonthDays - Math.abs(day); 
   }
-
-  const dayToIsoString = day > 9 ? day : `0${day}`
+  
+  const dayToIsoString = day > 9 ? day : `${day}`
   this.date = new Date(`${this.date.getFullYear()}-${month}-${dayToIsoString}`);
 }
 
@@ -142,7 +144,7 @@ const dateCalculator = new DateCalculator('2023-01-01')
 dateCalculator.addDays(40)
 console.log(dateCalculator.getResult()) // Виводить нову дату після додавання днів
 
-dateCalculator.subtractDays(11)
+dateCalculator.subtractDays(14)
 console.log(dateCalculator.getResult()) // Виводить нову дату після віднімання днів
 
 // export { doubleArrayElements, sumArray, SkillsManager, DateCalculator }
