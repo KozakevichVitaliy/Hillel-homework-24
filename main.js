@@ -53,18 +53,16 @@
 */
 
 class SkillsManager {
-  constructor() {
-    this.skills = [];
-  };
+  static skills = [];
   addSkill(skill) {
     if (typeof skill === 'string' && skill.trim().length >= 2) {
-      this.skills.push(skill);
+      SkillsManager.skills.push(skill);
       return skill;
     }
     return null;
   }
   getAllSkills() {
-    return [...this.skills];
+    return [...SkillsManager.skills];
   }
 }
 
@@ -90,14 +88,13 @@ console.log(skillsManager.getAllSkills())
  */
 
 const getAmountMonthDays = (month, date) => {
-  const days = month % 2 === 2 ? 30 : 31;
   switch (month) {
-    case 8:
-      return 31;
     case 2:
       return date.getFullYear() % 4 === 0 ? 29 : 28;
+    case 8:
+      return 31;
     default:
-      return days;
+      return (month % 2 === 2) ? 30 : 31;;
   }
 }
 
