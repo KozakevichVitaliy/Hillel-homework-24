@@ -95,7 +95,7 @@ const getAmountMonthDays = (month, date) => {
     case 8:
       return 31;
     case 2:
-      return date.getFullYear() % 2 === 0 ? 29 : 28;
+      return date.getFullYear() % 4 === 0 ? 29 : 28;
     default:
       return days;
   }
