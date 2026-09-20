@@ -57,14 +57,14 @@ class SkillsManager {
     this.skills = [];
   };
   addSkill(skill) {
-    if ('string' === typeof skill && skill.length >= 2) {
+    if (typeof skill === 'string' && skill.trim().length >= 2) {
       this.skills.push(skill);
       return skill;
     }
     return null;
-  };
+  }
   getAllSkills() {
-    return this.skills;
+    return [...this.skills];
   }
 }
 
@@ -89,34 +89,62 @@ console.log(skillsManager.getAllSkills())
  * Об'єкти DateCalculator мають створюватися за допомогою ключового слова new і використання функції-конструктора.
  */
 
-function DateCalculator(initialDate) {
-  this.date = new Date(initialDate)
-  this.year = this.date.getFullYear();
-  this.month = this.date.getMonth() + 1;
-  this.day = this.date.getDate();
-
-  this.addDays = function(days) {
-    this.day = this.day + days + 1;
-    this.date = new Date(`${this.year}-${this.month}-${this.day}`);
-  }
-
-  this.subtractDays = function(days) {
-    this.day = this.day - days;
-    this.date = new Date(`${this.year}-${this.month}-${this.day}`);
-    
-  }
-
-  this.getResult = function() {
-    return this.date;
+const getAmountMonthDays = (month, date) => {
+  const days = month % 2 === 2 ? 30 : 31;
+  switch (month) {
+    case 8:
+      return 31;
+    case 2:
+      return date.getFullYear() % 2 === 0 ? 29 : 28;
+    default:
+      return days;
   }
 }
 
+function DateCalculator(initialDate) {
+  this.date = new Date(initialDate)
+}
+
+DateCalculator.prototype.addDays = function(days) {
+  let month = this.date.getMonth() + 1;
+  let day = this.date.getDate() + days;
+  const correctMonthDays = getAmountMonthDays(month, this.date);
+
+  if (day > correctMonthDays) {
+    day = day - correctMonthDays;
+    month++;
+  }
+
+  const dayToIsoString = day > 9 ? day : `0${day}`
+  this.date = new Date(`${this.date.getFullYear()}-${month}-${dayToIsoString}`);
+}
+
+DateCalculator.prototype.subtractDays = function(days) {
+  let month = this.date.getMonth() + 1;
+  let day = this.date.getDate() - days;
+  
+  if (day < 0) {
+    month--;
+    day = getAmountMonthDays(month, this.date) - Math.abs(day); 
+  }
+
+  const dayToIsoString = day > 9 ? day : `0${day}`
+  this.date = new Date(`${this.date.getFullYear()}-${month}-${dayToIsoString}`);
+}
+
+DateCalculator.prototype.getResult = function() {
+  const month = this.date.getMonth() + 1;
+  const monthToIsoString = month > 9 ? month : `0${month}`
+  return `${this.date.getFullYear()}-${monthToIsoString}-${this.date.getDate()}`
+}
+
+
 // Демонстрація використання
 const dateCalculator = new DateCalculator('2023-01-01')
-dateCalculator.addDays(5)
+dateCalculator.addDays(40)
 console.log(dateCalculator.getResult()) // Виводить нову дату після додавання днів
 
-dateCalculator.subtractDays(3)
+dateCalculator.subtractDays(11)
 console.log(dateCalculator.getResult()) // Виводить нову дату після віднімання днів
 
 // export { doubleArrayElements, sumArray, SkillsManager, DateCalculator }
