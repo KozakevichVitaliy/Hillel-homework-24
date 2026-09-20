@@ -119,10 +119,11 @@ DateCalculator.prototype.addDays = function(days) {
 DateCalculator.prototype.subtractDays = function(days) {
   let month = this.date.getMonth() + 1;
   let day = this.date.getDate() - days;
+  const correctMonthDays = getAmountMonthDays(month, this.date);
   
   if (day < 0) {
     month--;
-    day = getAmountMonthDays(month, this.date) - Math.abs(day); 
+    day = correctMonthDays - Math.abs(day); 
   }
 
   const dayToIsoString = day > 9 ? day : `0${day}`
