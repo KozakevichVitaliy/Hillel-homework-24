@@ -107,35 +107,37 @@ function DateCalculator(initialDate) {
 DateCalculator.prototype.addDays = function(days) {
   let month = this.date.getMonth() + 1;
   let day = this.date.getDate() + days;
-  const correctMonthDays = getAmountMonthDays(month, this.date.getFullYear());
+  const amountMonthDays = getAmountMonthDays(month, this.date.getFullYear());
 
-  if (day > correctMonthDays) {
-    day = day - correctMonthDays;
+  if (day > amountMonthDays) {
+    day = day - amountMonthDays;
     month++;
   }
 
-  const dayToIsoString = day > 9 ? day : `0${day}`
-  this.date = new Date(`${this.date.getFullYear()}-${month}-${dayToIsoString}`);
+  this.date = new Date(`${this.date.getFullYear()}-${month}-${day}`);
 }
 
 DateCalculator.prototype.subtractDays = function(days) {
   let month = this.date.getMonth() + 1;
   let day = this.date.getDate() - days;
-  const correctMonthDays = getAmountMonthDays(month, this.date.getFullYear());
+  const amountMonthDays = getAmountMonthDays(month, this.date.getFullYear());
   
   if (day <= 0) {
     month--;
-    day = correctMonthDays - Math.abs(day); 
+    day = amountMonthDays - Math.abs(day); 
   }
+
+  this.date = new Date(`${this.date.getFullYear()}-${month}-${day}`);
   
-  const dayToIsoString = day > 9 ? day : `${day}`
-  this.date = new Date(`${this.date.getFullYear()}-${month}-${dayToIsoString}`);
 }
 
 DateCalculator.prototype.getResult = function() {
   const month = this.date.getMonth() + 1;
+  const day = this.date.getDate();
+  const dayToIsoString = day > 9 ? day : `0${day}`;
   const monthToIsoString = month > 9 ? month : `0${month}`
-  return `${this.date.getFullYear()}-${monthToIsoString}-${this.date.getDate()}`
+
+  return `${this.date.getFullYear()}-${monthToIsoString}-${dayToIsoString}`
 }
 
 
@@ -144,7 +146,7 @@ const dateCalculator = new DateCalculator('2023-01-01')
 dateCalculator.addDays(40)
 console.log(dateCalculator.getResult()) // Виводить нову дату після додавання днів
 
-dateCalculator.subtractDays(14)
+dateCalculator.subtractDays(13)
 console.log(dateCalculator.getResult()) // Виводить нову дату після віднімання днів
 
 // export { doubleArrayElements, sumArray, SkillsManager, DateCalculator }
