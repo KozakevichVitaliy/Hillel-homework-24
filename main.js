@@ -87,11 +87,11 @@ console.log(skillsManager.getAllSkills())
  * Об'єкти DateCalculator мають створюватися за допомогою ключового слова new і використання функції-конструктора.
  */
 
-const getAmountMonthDays = (month, date) => {
+const getAmountMonthDays = (month, year) => {
   switch (month) {
-    case 2 && date.getFullYear() % 4 !== 0:
+    case 2 && year % 4 !== 0:
       return 28;
-    case 2 && date.getFullYear() % 4 === 0:
+    case 2 && year % 4 === 0:
       return 29;
     case 8:
       return 31;
@@ -107,7 +107,7 @@ function DateCalculator(initialDate) {
 DateCalculator.prototype.addDays = function(days) {
   let month = this.date.getMonth() + 1;
   let day = this.date.getDate() + days;
-  const correctMonthDays = getAmountMonthDays(month, this.date);
+  const correctMonthDays = getAmountMonthDays(month, this.date.getFullYear());
 
   if (day > correctMonthDays) {
     day = day - correctMonthDays;
@@ -121,7 +121,7 @@ DateCalculator.prototype.addDays = function(days) {
 DateCalculator.prototype.subtractDays = function(days) {
   let month = this.date.getMonth() + 1;
   let day = this.date.getDate() - days;
-  const correctMonthDays = getAmountMonthDays(month, this.date);
+  const correctMonthDays = getAmountMonthDays(month, this.date.getFullYear());
   
   if (day <= 0) {
     month--;
